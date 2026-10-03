@@ -84,12 +84,6 @@
   position: relative;
 }
 
-.platform-details-inner--with-qr {
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-}
-
 .platform-details-inner::before {
   content: '';
   position: absolute;
@@ -106,7 +100,6 @@
   flex-direction: column;
   justify-content: center;
   gap: var(--space-xl);
-  padding-right: var(--space-2xl);
 }
 
 .platform-details-header {
@@ -121,12 +114,6 @@
   font-weight: 600;
   color: var(--color-text);
   margin: 0;
-}
-
-.platform-details-version {
-  font-size: 0.875rem;
-  color: var(--color-text-tertiary);
-  font-weight: 500;
 }
 
 .platform-details-actions {
@@ -173,59 +160,6 @@
   line-height: 1.5;
 }
 
-.platform-store-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: 0.75rem 1.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--color-text);
-  background: var(--color-surface);
-  text-decoration: none;
-  transition: border-color var(--duration-fast);
-}
-
-.platform-store-badge:hover {
-  border-color: var(--color-accent);
-}
-
-.platform-store-badge > i {
-  font-size: 1.125rem;
-  color: var(--color-text-secondary);
-}
-
-.platform-details-qr {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  padding-left: var(--space-2xl);
-  border-left: 1px solid var(--color-border-light);
-}
-
-.platform-qr-code {
-  width: 148px;
-  height: 148px;
-  background: #fff;
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: 4px;
-}
-
-.platform-qr-label {
-  font-size: 0.75rem;
-  color: var(--color-text-tertiary);
-  text-align: center;
-}
-
 .platforms-noscript {
   text-align: center;
   padding: var(--space-xl) 0;
@@ -247,29 +181,6 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .platform-details-inner--with-qr {
-    flex-direction: column;
-  }
-
-  .platform-details-left {
-    padding-right: 0;
-    padding-bottom: var(--space-xl);
-  }
-
-  .platform-details-qr {
-    flex-direction: row;
-    gap: var(--space-md);
-    align-items: center;
-    padding-left: 0;
-    padding-top: var(--space-xl);
-    border-left: none;
-    border-top: 1px solid var(--color-border-light);
-  }
-
-  .platform-qr-code {
-    width: 100px;
-    height: 100px;
-  }
 }
 
 @media (max-width: 599px) {
@@ -305,17 +216,4 @@
     justify-content: center;
   }
 
-  .platform-store-badge {
-    justify-content: center;
-  }
-
-  .platform-details-qr {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .platform-qr-code {
-    width: 140px;
-    height: 140px;
-  }
 }

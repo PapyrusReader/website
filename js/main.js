@@ -2,74 +2,18 @@
   'use strict';
 
   const THEMES = {
-    'light-gold': { metaColor: '#FDFAF5', qrDot: '#2D2A26' },
-    'dark-gold': { metaColor: '#1A1814', qrDot: '#2D2A26' },
-    'light-purple': { metaColor: '#FAFAFE', qrDot: '#1C1B1F' },
-    'dark-purple': { metaColor: '#151318', qrDot: '#1C1B1F' },
+    'light-gold': { metaColor: '#FDFAF5' },
+    'dark-gold': { metaColor: '#1A1814' },
+    'light-purple': { metaColor: '#FAFAFE' },
+    'dark-purple': { metaColor: '#151318' },
   };
 
   const DEFAULT_THEME = 'light-gold';
-  const VERSION = '1.2.0';
-  const BASE = `https://github.com/Eoic/Papyrus/releases/download/v${VERSION}`;
-
-  const PLATFORMS = {
-    android: {
-      name: 'Android',
-      downloadLabel: 'Download APK',
-      downloadUrl: `${BASE}/papyrus-v${VERSION}-android-arm64.apk`,
-      fileName: `papyrus-v${VERSION}-android-arm64.apk`,
-      fileSize: '48.3 MB',
-      showQr: true,
-      qrUrl: `${BASE}/papyrus-v${VERSION}-android-arm64.apk`,
-      store: { name: 'Google Play', icon: 'fa-brands fa-google-play', url: '#' },
-    },
-    ios: {
-      name: 'iOS',
-      downloadLabel: 'Download IPA',
-      downloadUrl: `${BASE}/papyrus-v${VERSION}-ios-arm64.ipa`,
-      fileName: `papyrus-v${VERSION}-ios-arm64.ipa`,
-      fileSize: '52.1 MB',
-      showQr: true,
-      qrUrl: `${BASE}/papyrus-v${VERSION}-ios-arm64.ipa`,
-      store: { name: 'App Store', icon: 'fa-brands fa-app-store', url: '#' },
-    },
-    windows: {
-      name: 'Windows',
-      downloadLabel: 'Download ZIP',
-      downloadUrl: `${BASE}/papyrus-v${VERSION}-windows-x64.zip`,
-      fileName: `papyrus-v${VERSION}-windows-x64.zip`,
-      fileSize: '62.1 MB',
-      showQr: false,
-      store: null,
-    },
-    macos: {
-      name: 'macOS',
-      downloadLabel: 'Download DMG',
-      downloadUrl: `${BASE}/papyrus-v${VERSION}-macos-universal.dmg`,
-      fileName: `papyrus-v${VERSION}-macos-universal.dmg`,
-      fileSize: '71.4 MB',
-      showQr: false,
-      store: { name: 'Mac App Store', icon: 'fa-brands fa-app-store', url: '#' },
-    },
-    linux: {
-      name: 'Linux',
-      downloadLabel: 'Download tar.gz',
-      downloadUrl: `${BASE}/papyrus-v${VERSION}-linux-x64.tar.gz`,
-      fileName: `papyrus-v${VERSION}-linux-x64.tar.gz`,
-      fileSize: '58.7 MB',
-      showQr: false,
-      store: null,
-    },
-    web: {
-      name: 'Web',
-      downloadLabel: 'Download ZIP',
-      downloadUrl: `${BASE}/papyrus-v${VERSION}-web.zip`,
-      fileName: `papyrus-v${VERSION}-web.zip`,
-      fileSize: '24.5 MB',
-      showQr: false,
-      store: null,
-    },
-  };
+  const RELEASES_URL = 'https://github.com/PapyrusReader/client/releases';
+  const PLATFORMS = Object.fromEntries([
+    ['android', 'Android'], ['ios', 'iOS'], ['windows', 'Windows'],
+    ['macos', 'macOS'], ['linux', 'Linux'], ['web', 'Web'],
+  ].map(([key, name]) => [key, { name }]));
 
   const getCurrentTheme = () =>
     document.documentElement.getAttribute('data-theme') ?? DEFAULT_THEME;
@@ -94,13 +38,7 @@
       document.documentElement.removeAttribute('data-theme-transitioning');
     }, 350);
 
-    if (currentPlatform && PLATFORMS[currentPlatform]?.showQr) {
-      const container = document.querySelector(`.platform-qr-code[data-qr-target="${currentPlatform}"]`);
-      if (container) {
-        container.replaceChildren();
-        generateQrCode(currentPlatform);
-      }
-    }
+
   };
 
   const detectPlatform = () => {
@@ -136,96 +74,33 @@
   const detectedPlatform = detectPlatform();
   let currentPlatform = null;
 
-  const buildStoreBadge = (store) => {
-    if (!store) return null;
-    const badge = el('a', 'platform-store-badge', { href: store.url });
-    badge.appendChild(faIcon(store.icon));
-    const label = document.createElement('span');
-    label.textContent = store.name;
-    badge.appendChild(label);
-    return badge;
-  };
-
   const buildPanelEl = (key) => {
     const cfg = PLATFORMS[key];
     if (!cfg) return null;
 
-    const inner = el('div', cfg.showQr
-      ? 'platform-details-inner platform-details-inner--with-qr'
-      : 'platform-details-inner');
-
+    const inner = el('div', 'platform-details-inner');
     const left = el('div', 'platform-details-left');
-
     const header = el('div', 'platform-details-header');
     const title = el('h3', 'platform-details-title');
     title.textContent = cfg.name;
     header.appendChild(title);
-    const ver = el('span', 'platform-details-version');
-    ver.textContent = `v${VERSION}`;
-    header.appendChild(ver);
     left.appendChild(header);
 
     const actions = el('div', 'platform-details-actions');
     const actionsRow = el('div', 'platform-actions-row');
-
-    const dlBtn = el('a', 'platform-download-btn', { href: cfg.downloadUrl, download: '' });
-    dlBtn.appendChild(faIcon('fa-solid fa-download'));
-    const dlSpan = document.createElement('span');
-    dlSpan.textContent = cfg.downloadLabel;
-    dlBtn.appendChild(dlSpan);
-    actionsRow.appendChild(dlBtn);
-
-    const storeBadge = buildStoreBadge(cfg.store);
-
-    if (storeBadge)
-      actionsRow.appendChild(storeBadge);
-
+    const releases = el('a', 'platform-download-btn', { href: RELEASES_URL });
+    releases.appendChild(faIcon('fa-brands fa-github'));
+    const label = document.createElement('span');
+    label.textContent = 'Check available releases';
+    releases.appendChild(label);
+    actionsRow.appendChild(releases);
     actions.appendChild(actionsRow);
-
     const meta = el('span', 'platform-download-meta');
-    meta.textContent = `${cfg.fileName}  \u00B7  ${cfg.fileSize}`;
+    meta.textContent = 'Platform support is under development. Release builds are not published yet.';
     actions.appendChild(meta);
     left.appendChild(actions);
     inner.appendChild(left);
-
-    if (cfg.showQr) {
-      const qrWrap = el('div', 'platform-details-qr');
-      const qrBox = el('div', 'platform-qr-code', { 'data-qr-target': key });
-      qrWrap.appendChild(qrBox);
-      const qrLabel = el('span', 'platform-qr-label');
-      qrLabel.textContent = 'Scan to download';
-      qrWrap.appendChild(qrLabel);
-      inner.appendChild(qrWrap);
-    }
-
     return inner;
-  };
-
-  const generateQrCode = (key) => {
-    if (typeof QRCodeStyling === 'undefined') return;
-
-    const cfg = PLATFORMS[key];
-    if (!cfg?.qrUrl) return;
-
-    const container = document.querySelector(`.platform-qr-code[data-qr-target="${key}"]`);
-    if (!container) return;
-
-    const theme = getCurrentTheme();
-    const { qrDot } = THEMES[theme] ?? {};
-
-    const qr = new QRCodeStyling({
-      width: 140,
-      height: 140,
-      type: 'svg',
-      data: cfg.qrUrl,
-      dotsOptions: { color: qrDot ?? '#2D2A26', type: 'rounded' },
-      backgroundOptions: { color: '#FFFFFF' },
-      cornersSquareOptions: { type: 'extra-rounded' },
-      cornersDotOptions: { type: 'dot' },
-      qrOptions: { errorCorrectionLevel: 'M' },
-    });
-
-    qr.append(container);
   };
 
   const collapsePanel = () => {
@@ -263,9 +138,6 @@
     document.querySelector(`.platform-card[data-platform="${key}"]`)
       ?.setAttribute('aria-expanded', 'true');
 
-    if (PLATFORMS[key]?.showQr) {
-      generateQrCode(key);
-    }
   };
 
   const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
