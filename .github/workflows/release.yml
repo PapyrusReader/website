@@ -1,0 +1,110 @@
+name: Website release
+
+on:
+  push:
+    branches: [master]
+    paths: [package.json]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-production
+  cancel-in-progress: false
+
+jobs:
+  version:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    outputs:
+      release: ${{ steps.gate.outputs.release }}
+      version: ${{ steps.gate.outputs.version }}
+      tag: ${{ steps.gate.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check website version
+        id: gate
+        env:
+          BEFORE: ${{ github.event.before }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = workflow_dispatch ]; then
+            python3 scripts/release-gate.py --manual
+          else
+            python3 scripts/release-gate.py --base "$BEFORE"
+          fi
+
+  release:
+    needs: version
+    if: needs.version.outputs.release == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    environment:
+      name: production
+      url: https://papyrus-reader.com
+    env:
+      BUILD_REVISION: ${{ github.sha }}
+      WEBSITE_VERSION: ${{ needs.version.outputs.version }}
+      WEBSITE_TAG: ${{ needs.version.outputs.tag }}
+      WEBSITE_SSH_HOST: ${{ vars.WEBSITE_SSH_HOST }}
+      WEBSITE_SSH_USER: ${{ vars.WEBSITE_SSH_USER }}
+      WEBSITE_SSH_KNOWN_HOSTS: ${{ vars.WEBSITE_SSH_KNOWN_HOSTS }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: python3 -m unittest discover -s scripts/tests -v
+      - run: npm ci
+      - run: npm run build
+      - name: Package website
+        run: |
+          tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -czf "papyrus-website-v${WEBSITE_VERSION}.tar.gz" -C build .
+          sha256sum "papyrus-website-v${WEBSITE_VERSION}.tar.gz" > "papyrus-website-v${WEBSITE_VERSION}.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website-release
+          path: papyrus-website-v${{ needs.version.outputs.version }}.tar.gz*
+          if-no-files-found: error
+      - name: Deploy website
+        env:
+          WEBSITE_SSH_PRIVATE_KEY: ${{ secrets.WEBSITE_SSH_PRIVATE_KEY }}
+        run: |
+          test -n "$WEBSITE_SSH_HOST" && test -n "$WEBSITE_SSH_USER" && test -n "$WEBSITE_SSH_KNOWN_HOSTS" && test -n "$WEBSITE_SSH_PRIVATE_KEY" || { echo "Configure the website production SSH settings"; exit 1; }
+          install -d -m 700 "$RUNNER_TEMP/website-ssh"
+          printf '%s\n' "$WEBSITE_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/website-ssh/key"
+          chmod 600 "$RUNNER_TEMP/website-ssh/key"
+          printf '%s\n' "$WEBSITE_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/website-ssh/known_hosts"
+          target="${WEBSITE_SSH_USER}@${WEBSITE_SSH_HOST}"
+          options=(-i "$RUNNER_TEMP/website-ssh/key" -o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$RUNNER_TEMP/website-ssh/known_hosts")
+          archive="papyrus-website-v${WEBSITE_VERSION}.tar.gz"
+          checksum=$(sha256sum "$archive" | cut -d ' ' -f 1)
+          scp "${options[@]}" "$archive" "$target:incoming.tar.gz"
+          printf -v remote_command 'python3 - incoming.tar.gz %q %q' "$GITHUB_SHA" "$checksum"
+          # shellcheck disable=SC2029
+          ssh "${options[@]}" "$target" "$remote_command" < scripts/install-release.py
+      - name: Verify public website
+        run: |
+          curl --fail --silent --show-error --max-time 20 --retry 5 --retry-all-errors --retry-delay 2 \
+            "https://papyrus-reader.com/version.json?deployment=${GITHUB_SHA}" > "$RUNNER_TEMP/website-version.json"
+          python3 -c 'import json, os; from pathlib import Path; metadata = json.loads((Path(os.environ["RUNNER_TEMP"]) / "website-version.json").read_text()); assert metadata["revision"] == os.environ["GITHUB_SHA"], "Public website does not match the release"'
+      - name: Publish website release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view "$WEBSITE_TAG" >/dev/null 2>&1; then
+            gh release upload "$WEBSITE_TAG" "papyrus-website-v${WEBSITE_VERSION}.tar.gz" "papyrus-website-v${WEBSITE_VERSION}.tar.gz.sha256" --clobber
+          else
+            gh release create "$WEBSITE_TAG" "papyrus-website-v${WEBSITE_VERSION}.tar.gz" "papyrus-website-v${WEBSITE_VERSION}.tar.gz.sha256" \
+              --target "$GITHUB_SHA" --title "Website ${WEBSITE_VERSION}" --generate-notes
+          fi
+      - name: Remove temporary SSH credentials
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/website-ssh"
