@@ -3,6 +3,7 @@ node_modules/
 
 # Build output
 build/
+__pycache__/
 
 # Compiled CSS (generated from SCSS)
 css/style.css

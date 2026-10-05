@@ -18,5 +18,6 @@ jobs:
         with:
           node-version: '22'
           cache: npm
+      - run: python3 -m unittest discover -s scripts/tests -v
       - run: npm ci
       - run: npm run build
