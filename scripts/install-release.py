@@ -61,7 +61,7 @@ def main() -> None:
     parser.add_argument("archive", type=Path)
     parser.add_argument("revision")
     parser.add_argument("checksum")
-    parser.add_argument("--root", type=Path, default=Path("/srv/apps/papyrus/deploy/website"))
+    parser.add_argument("--root", type=Path, default=Path("/srv/apps/papyrus-website/site"))
     args = parser.parse_args()
     install(args.archive, args.revision, args.checksum, args.root)
 
