@@ -4,14 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Papyrus: Your books, your data, every device</title>
+  <title>Papyrus: Free, Open-Source E-book Reader &amp; Library Manager</title>
   <meta name="description"
-    content="A free, open-source e-book reader and library manager. No subscriptions. No tracking. No lock-in.">
+    content="Organize physical and digital books with Papyrus, a free, open-source e-book reader and library manager. Read offline or sync across devices.">
   <meta name="theme-color" content="#FFFBFF" id="meta-theme-color">
   <meta name="color-scheme" content="light dark">
-  <meta property="og:title" content="Papyrus: Your books, your data, every device">
+  <meta property="og:title" content="Papyrus: Free, Open-Source E-book Reader &amp; Library Manager">
+  <meta property="og:site_name" content="Papyrus">
   <meta property="og:description"
-    content="A free, open-source e-book reader and library manager. No subscriptions. No tracking. No lock-in.">
+    content="Organize physical and digital books with Papyrus, a free, open-source e-book reader and library manager. Read offline or sync across devices.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://papyrus-reader.com/">
   <meta property="og:image" content="https://papyrus-reader.com/public/img/library.png">
@@ -19,6 +20,38 @@
   <meta property="og:image:height" content="1440">
   <meta property="og:image:alt" content="The Papyrus library, showing physical books and ebooks together">
   <link rel="canonical" href="https://papyrus-reader.com/">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://papyrus-reader.com/#website",
+          "name": "Papyrus",
+          "alternateName": "Papyrus Reader",
+          "url": "https://papyrus-reader.com/",
+          "inLanguage": "en",
+          "about": { "@id": "https://papyrus-reader.com/#application" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://papyrus-reader.com/#application",
+          "name": "Papyrus",
+          "url": "https://app.papyrus-reader.com",
+          "description": "A free, open-source e-book reader and library manager for physical and digital books.",
+          "applicationCategory": "ReferenceApplication",
+          "operatingSystem": "Windows, Linux",
+          "browserRequirements": "A modern web browser for the web app.",
+          "downloadUrl": "https://github.com/PapyrusReader/client/releases/latest",
+          "screenshot": "https://papyrus-reader.com/public/img/library.png",
+          "license": "https://github.com/PapyrusReader/client/blob/master/LICENSE",
+          "isAccessibleForFree": true,
+          "offers": { "@type": "Offer", "price": 0 },
+          "sameAs": "https://github.com/PapyrusReader/client"
+        }
+      ]
+    }
+  </script>
   <link rel="icon" type="image/svg+xml" href="/public/favicon.svg">
   <link rel="icon" type="image/png" href="/public/favicon-96x96.png" sizes="96x96">
   <link rel="shortcut icon" href="/public/favicon.ico">
