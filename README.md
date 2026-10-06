@@ -41,6 +41,22 @@ Run `npm test` for the focused theme preference checks and `npm run build` for
 the static build. Review both themes at 320, 390, 720, 900, 1440 and 1920 pixels,
 including keyboard navigation, 200% zoom, reduced motion and JavaScript disabled.
 
+## Search indexing
+
+The homepage includes a descriptive search title, a canonical URL, and JSON-LD
+for the Papyrus website and free application. Application platforms describe
+the available Windows/Linux downloads and browser app. Ratings and reviews are
+omitted until genuine reviews can be displayed; the markup does not yet meet
+Google's rating/review requirement for software-app rich results.
+
+`robots.txt` and `sitemap.xml` are copied to the build root. The sitemap contains
+only the canonical homepage; section anchors and the separate app/docs sites
+are not additional landing-page URLs. Add future public pages when they exist.
+
+After deployment, submit `https://papyrus-reader.com/sitemap.xml` in Search
+Console and inspect the homepage using **Test live URL** and **Request indexing**.
+Google decides when to crawl and how to display the page in search results.
+
 ## Releases and production deployment
 
 The public website is served at `https://papyrus-reader.com`; `www` redirects
