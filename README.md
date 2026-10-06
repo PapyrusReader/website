@@ -1,6 +1,6 @@
 # Papyrus website
 
-Landing page for the [Papyrus](https://github.com/PapyrusReader/papyrus) project - a free, open-source e-book reader and library manager for Android, iOS, Windows, macOS, Linux, and Web.
+Public landing page for [Papyrus](https://github.com/PapyrusReader/papyrus), a free, open-source book library and reader. The website introduces the library, reading and optional sync features, presents the intended product feature set and format support, and directs visitors to the web app and Windows/Linux downloads.
 
 ## Getting Started
 
@@ -9,9 +9,37 @@ npm ci
 npm run dev
 ```
 
-This starts a local server at `http://localhost:8090` with live SCSS recompilation.
+This starts a local server at `http://localhost:8090` with live SCSS recompilation. JavaScript source files run directly; refresh after editing them.
 
 Build deployable assets with `npm run build`; output is written to `build/`.
+
+## Design and assets
+
+Product copy presents the core product requirements in present tense, rather
+than acting as a released-feature checklist. Its source is the project docs'
+`index.rst` and `requirements/functional.rst`: library organization and search,
+imports and metadata, reading, annotations, exports, goals, storage and sync.
+Speculative advanced ideas such as AI features and audiobooks are not included.
+
+The website uses the client's purple identity with light/dark surfaces. It follows
+`prefers-color-scheme` until a visitor chooses a theme, then saves that choice in
+`papyrus-theme`. Legacy gold/purple choices migrate to light/dark. The small theme
+script loads before the stylesheet to avoid showing the wrong theme initially.
+Without JavaScript, the system theme, navigation, screenshot and download links
+remain usable. Reduced-motion preferences disable smooth scrolling.
+
+Brand SVGs in `public/img/` are copied from the client's `public/img/` assets.
+The library screenshot is the original client README image, with local WebP
+variants at 640, 1280, 1920 and 2560 pixels. The full-resolution PNG is available
+through the enlargement link and is the social preview image. It always shows
+the real dark-mode app, independent of the website theme. Favicons use the
+canonical emblem from the client's `app/assets/images/logo-icon-light.svg`.
+These are checked-in assets; website builds do not need the client repository
+or image-generation tools.
+
+Run `npm test` for the focused theme preference checks and `npm run build` for
+the static build. Review both themes at 320, 390, 720, 900, 1440 and 1920 pixels,
+including keyboard navigation, 200% zoom, reduced motion and JavaScript disabled.
 
 ## Releases and production deployment
 
