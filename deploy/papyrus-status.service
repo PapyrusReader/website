@@ -1,0 +1,17 @@
+[Unit]
+Description=Update the public Papyrus service status
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+DynamicUser=yes
+StateDirectory=papyrus-status
+StateDirectoryMode=0755
+ExecStart=/usr/bin/python3 /srv/apps/papyrus-website/collect-status.py
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+TimeoutStartSec=25

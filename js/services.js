@@ -25,23 +25,20 @@
     if (!Object.keys(links).length) throw new Error('No release downloads');
     return { version: release.tag_name.slice(1), notes: `${repository}/releases/tag/${encodeURIComponent(release.tag_name)}`, links };
   }
-  async function checkService(url, service, fetcher = fetch, timeout = 8000) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeout);
-    const start = performance.now();
-    try {
-      const response = await fetcher(url, { cache: 'no-store', credentials: 'omit', signal: controller.signal });
-      if (!response.ok) return { state: 'unavailable', message: `HTTP ${response.status}` };
-      const data = await response.json();
-      const healthy = service === 'api' ? data.status === 'healthy' : data.ready === true && data.started === true;
-      return { state: healthy ? 'healthy' : 'unavailable', message: healthy ? `${Math.round(performance.now() - start)} ms` : 'Health check did not pass' };
-    } catch (error) {
-      return { state: 'unknown', message: controller.signal.aborted ? 'Check timed out' : 'Could not check from this browser' };
-    } finally {
-      clearTimeout(timer);
+  function serviceStatus(snapshot, now = Date.now()) {
+    const checkedAt = Date.parse(snapshot?.checked_at);
+    if (!Number.isFinite(checkedAt) || checkedAt > now + 60000 || now - checkedAt > 180000) {
+      throw new Error('Status snapshot is stale or invalid');
     }
+    const states = {};
+    for (const service of ['api', 'sync']) {
+      const state = snapshot.services?.[service];
+      if (!['operational', 'disrupted'].includes(state)) throw new Error('Invalid service status');
+      states[service] = state;
+    }
+    return { checkedAt, states };
   }
-  const api = { releaseDownloads, checkService };
+  const api = { releaseDownloads, serviceStatus };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PapyrusSite = api;
 })(globalThis);

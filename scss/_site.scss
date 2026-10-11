@@ -138,8 +138,8 @@ h3 { font-size: 25px; letter-spacing: -.025em; }
 .service-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
 .service-heading h2 { font-size: 26px; }
 .service-state { font-size: 14px; padding: 5px 12px; border: 1px solid var(--border); border-radius: 20px; }
-.service-state[data-state='healthy'] { color: var(--accent); }
-.service-state[data-state='unavailable'] { font-weight: 700; }
+.service-state[data-state='operational'] { color: var(--accent); }
+.service-state[data-state='disrupted'] { font-weight: 700; }
 .service-card > a { display: inline-block; margin-top: 20px; overflow-wrap: anywhere; }
 .service-detail { font-size: 14px; }
 button:disabled { opacity: .65; cursor: wait; }
