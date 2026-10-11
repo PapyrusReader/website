@@ -1,38 +1,35 @@
 (() => {
   'use strict';
-  const endpoints = { api: 'https://api.papyrus-reader.com/health', sync: 'https://sync.papyrus-reader.com/probes/readiness' };
-  const labels = { healthy: 'Responding', unavailable: 'Unavailable', unknown: 'Unable to check' };
-  const button = document.getElementById('refresh-status');
+  const labels = { operational: 'Operational', disrupted: 'Service disruption', unknown: 'Status unavailable' };
   const summary = document.getElementById('status-summary');
+  const updated = document.getElementById('status-updated');
   let running = false;
-  let timer;
   async function refresh() {
     if (running || document.hidden) return;
-    clearTimeout(timer);
     running = true;
-    button.disabled = true;
-    summary.textContent = 'Checking services…';
-    const results = await Promise.all(Object.entries(endpoints).map(async ([service, url]) => {
-      const card = document.querySelector(`[data-service="${service}"]`);
-      const badge = card.querySelector('.service-state');
-      badge.textContent = 'Checking…';
-      badge.dataset.state = 'unknown';
-      const result = await window.PapyrusSite.checkService(url, service);
-      badge.textContent = labels[result.state];
-      badge.dataset.state = result.state;
-      card.querySelector('.service-detail').textContent = `${result.message} · Checked ${new Date().toLocaleTimeString()}`;
-      return result;
-    }));
-    summary.textContent = results.every(result => result.state === 'healthy') ? 'All services responding' : 'Some checks need attention';
-    button.disabled = false;
-    running = false;
-    timer = setTimeout(refresh, 60000);
+    try {
+      const response = await fetch('/status.json', { credentials: 'omit', signal: AbortSignal.timeout(8000) });
+      if (!response.ok) throw new Error('Status unavailable');
+      const result = window.PapyrusSite.serviceStatus(await response.json());
+      for (const [service, state] of Object.entries(result.states)) {
+        const badge = document.querySelector(`[data-service="${service}"] .service-state`);
+        badge.textContent = labels[state];
+        badge.dataset.state = state;
+      }
+      summary.textContent = Object.values(result.states).every(state => state === 'operational') ? 'All systems operational' : 'Service disruption';
+      updated.textContent = `Updated ${new Date(result.checkedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    } catch {
+      summary.textContent = 'Status unavailable';
+      updated.textContent = '';
+      for (const badge of document.querySelectorAll('.service-state')) {
+        badge.textContent = labels.unknown;
+        badge.dataset.state = 'unknown';
+      }
+    } finally {
+      running = false;
+    }
   }
-  button.hidden = false;
-  button.addEventListener('click', refresh);
-  document.addEventListener('visibilitychange', () => {
-    clearTimeout(timer);
-    if (!document.hidden) refresh();
-  });
+  // Visitors read a cached snapshot. Only the scheduled monitor probes services.
   refresh();
+  setInterval(refresh, 60000);
 })();

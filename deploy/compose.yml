@@ -4,9 +4,10 @@ services:
   website:
     image: caddy:2.10.2-alpine
     restart: unless-stopped
-    command: ['caddy', 'file-server', '--listen', ':8080', '--root', '/srv/site/current']
     volumes:
       - ./site:/srv/site:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /var/lib/papyrus-status:/srv/status:ro
     networks:
       edge:
         aliases: [papyrus-website]

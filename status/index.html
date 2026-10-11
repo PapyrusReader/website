@@ -58,16 +58,14 @@
     </nav>
   </header>
   <main id="main" class="container status-page">
-    <p class="eyebrow">Papyrus services</p>
     <h1>Service status</h1>
-    <p class="hero-description">Check the services that keep your account and library in sync. Offline reading stays available on your device.</p>
-    <div class="status-summary"><h2 id="status-summary" aria-live="polite">Waiting for a check</h2><button class="button button-primary" id="refresh-status" type="button" hidden>Check again</button></div>
-    <noscript><p>Enable JavaScript to run live checks, or open either health endpoint below.</p></noscript>
+    <div class="status-summary"><h2 id="status-summary" aria-live="polite">Loading status…</h2></div>
+    <noscript><p>Enable JavaScript to view service status.</p></noscript>
     <div class="status-grid">
-      <article class="service-card" data-service="api"><div class="service-heading"><h2>API</h2><span class="service-state" data-state="unknown" aria-live="polite">Not checked</span></div><p>Account and library requests. This check confirms that the API responds.</p><a href="https://api.papyrus-reader.com/health">api.papyrus-reader.com ↗</a><p class="service-detail">No check yet</p></article>
-      <article class="service-card" data-service="sync"><div class="service-heading"><h2>Sync</h2><span class="service-state" data-state="unknown" aria-live="polite">Not checked</span></div><p>Library synchronization. This check confirms that the sync service is ready.</p><a href="https://sync.papyrus-reader.com/probes/readiness">sync.papyrus-reader.com ↗</a><p class="service-detail">No check yet</p></article>
+      <article class="service-card" data-service="api"><div class="service-heading"><h2>API</h2><span class="service-state" data-state="unknown" aria-live="polite">Loading…</span></div><p>api.papyrus-reader.com</p></article>
+      <article class="service-card" data-service="sync"><div class="service-heading"><h2>Sync</h2><span class="service-state" data-state="unknown" aria-live="polite">Loading…</span></div><p>sync.papyrus-reader.com</p></article>
     </div>
-    <p class="status-note">Checks run from your browser every minute while this page is visible. A connection issue can affect your results. This page shows current responses, not uptime history.</p>
+    <p class="status-note" id="status-updated"></p>
   </main>
   <footer class="site-footer container">
     <a class="footer-home" href="/">Papyrus</a>

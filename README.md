@@ -120,12 +120,20 @@ A failed or rate-limited lookup keeps the known release links and labels the
 lookup as unavailable. Android's AAB is clearly labeled as a publishing bundle.
 Tester installations use the separate Google Play opt-in link.
 
-`/status/` checks the public API `/health` and sync `/probes/readiness` endpoints
-from the visitor's browser, without credentials. Requests time out after eight
-seconds. Non-success responses and unhealthy payloads are shown as unavailable.
-Network errors and timeouts are shown as uncertain, not confirmed outages.
-Checks refresh every minute while the page is visible. There is no uptime history.
-The shared edge proxy permits the website origin to read only GET `/health`.
-API health confirms a response, not database or end-to-end account functionality.
+`/status/` reads a cached `/status.json` snapshot. A systemd timer probes API
+health and sync readiness once per minute, independently of site visitors.
+There is no refresh button and browsers never probe the services. Snapshots
+older than three minutes show Status unavailable. These are service health
+checks, without historical uptime or end-to-end account checks.
+
+Install `deploy/collect-status.py` at `/srv/apps/papyrus-website/collect-status.py`
+and the two `deploy/papyrus-status.*` units in `/etc/systemd/system/`.
+Run `systemctl daemon-reload`, `systemctl start papyrus-status.service` and
+`systemctl enable --now papyrus-status.timer`. The restricted monitor owns only
+`/var/lib/papyrus-status`, which the website mounts read-only. Install
+`deploy/Caddyfile` beside the website Compose file and apply that project with
+`docker compose up -d --wait`. This one-time configuration update replaces only
+the website container. Subsequent website releases still switch static files
+without restarting services. `/status.json` is publicly cached for 30 seconds.
 
 Use no semicolons in website prose.
