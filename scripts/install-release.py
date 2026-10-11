@@ -34,7 +34,7 @@ def install(archive: Path, revision: str, checksum: str, root: Path) -> None:
             metadata = json.loads((staging / "version.json").read_text())
             if metadata["revision"] != revision:
                 raise ValueError("Website artifact revision does not match the build")
-            for required in ("index.html", "css/style.css", "js/main.js"):
+            for required in ("index.html", "status/index.html", "css/style.css", "js/main.js", "js/services.js", "js/downloads.js", "js/status.js"):
                 if not (staging / required).is_file():
                     raise ValueError(f"Website artifact is missing {required}")
             (staging / ".artifact-sha256").write_text(checksum + "\n")

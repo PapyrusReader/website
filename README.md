@@ -1,6 +1,6 @@
 # Papyrus website
 
-Public landing page for [Papyrus](https://github.com/PapyrusReader/papyrus), a free, open-source book library and reader. The website introduces the library, reading and optional sync features, presents the intended product feature set and format support, and directs visitors to the web app and Windows/Linux downloads.
+Public landing page for [Papyrus](https://github.com/PapyrusReader/papyrus), a free, open-source book library and reader. The website introduces the library, reading and optional sync features, presents the intended product feature set and format support, and directs visitors to the web app and separate direct downloads for Windows, Linux, Android bundles, and web archives.
 
 ## Getting Started
 
@@ -9,9 +9,9 @@ npm ci
 npm run dev
 ```
 
-This starts a local server at `http://localhost:8090` with live SCSS recompilation. JavaScript source files run directly; refresh after editing them.
+This starts a local server at `http://localhost:8090` with live SCSS recompilation. JavaScript source files run directly. refresh after editing them.
 
-Build deployable assets with `npm run build`; output is written to `build/`.
+Build deployable assets with `npm run build`. output is written to `build/`.
 
 ## Design and assets
 
@@ -34,7 +34,7 @@ variants at 640, 1280, 1920 and 2560 pixels. The full-resolution PNG is availabl
 through the enlargement link and is the social preview image. It always shows
 the real dark-mode app, independent of the website theme. Favicons use the
 canonical emblem from the client's `app/assets/images/logo-icon-light.svg`.
-These are checked-in assets; website builds do not need the client repository
+These are checked-in assets. website builds do not need the client repository
 or image-generation tools.
 
 Run `npm test` for the focused theme preference checks and `npm run build` for
@@ -46,11 +46,11 @@ including keyboard navigation, 200% zoom, reduced motion and JavaScript disabled
 The homepage includes a descriptive search title, a canonical URL, and JSON-LD
 for the Papyrus website and free application. Application platforms describe
 the available Windows/Linux downloads and browser app. Ratings and reviews are
-omitted until genuine reviews can be displayed; the markup does not yet meet
+omitted until genuine reviews can be displayed. the markup does not yet meet
 Google's rating/review requirement for software-app rich results.
 
 `robots.txt` and `sitemap.xml` are copied to the build root. The sitemap contains
-only the canonical homepage; section anchors and the separate app/docs sites
+the canonical homepage and status page. Section anchors and the separate app/docs sites
 are not additional landing-page URLs. Add future public pages when they exist.
 
 After deployment, submit `https://papyrus-reader.com/sitemap.xml` in Search
@@ -59,7 +59,7 @@ Google decides when to crawl and how to display the page in search results.
 
 ## Releases and production deployment
 
-The public website is served at `https://papyrus-reader.com`; `www` redirects
+The public website is served at `https://papyrus-reader.com`. `www` redirects
 there. It runs in its own `papyrus-website` Compose project on the Hetzner VM,
 separate from the app services. The shared `papyrus-edge` proxy owns ports 80/443
 and routes website traffic to `papyrus-website:8080` over the external Docker
@@ -81,7 +81,7 @@ version bump. CI builds and tests integration changes without deploying them.
 When ready to release, run `npm version patch --no-git-tag-version` to update
 `package.json` and `package-lock.json` in a preparation PR to `development`.
 Then open `development` → `master` and use **Create a merge commit**. Bring
-`master` back into `development` after the release; keep both long-lived branches
+`master` back into `development` after the release. keep both long-lived branches
 and do not squash release promotions.
 After merging into `master`, **Website release** builds only when that version
 increases. It verifies and deploys the archive, checks the public build revision,
@@ -103,10 +103,29 @@ owns `/srv/apps/papyrus-website/site` and has no sudo or Docker access. The
 website's own container mounts that directory read-only. Each deployment validates the
 archive checksum, revision and required assets before atomically switching the
 relative `current` symlink to `releases/<commit>`. Previous releases remain
-available for rollback; switch `current` back to an earlier relative release
+available for rollback. switch `current` back to an earlier relative release
 path without restarting any container. The app Compose project is not involved
-in website deployments; app releases do not restart the website or shared proxy.
+in website deployments. app releases do not restart the website or shared proxy.
 
 Run the focused automation checks with
 `python3 -m unittest discover -s scripts/tests -v`. Normal website CI also builds
-the static assets; it never deploys pull requests.
+the static assets. it never deploys pull requests.
+
+## Downloads and service status
+
+Each platform has separate direct asset links. The checked-in links remain usable
+without JavaScript. With JavaScript, the page reads the latest published client
+release from GitHub and replaces links with that release's available assets.
+A failed or rate-limited lookup keeps the known release links and labels the
+lookup as unavailable. Android's AAB is clearly labeled as a publishing bundle.
+Tester installations use the separate Google Play opt-in link.
+
+`/status/` checks the public API `/health` and sync `/probes/readiness` endpoints
+from the visitor's browser, without credentials. Requests time out after eight
+seconds. Non-success responses and unhealthy payloads are shown as unavailable.
+Network errors and timeouts are shown as uncertain, not confirmed outages.
+Checks refresh every minute while the page is visible. There is no uptime history.
+The shared edge proxy permits the website origin to read only GET `/health`.
+API health confirms a response, not database or end-to-end account functionality.
+
+Use no semicolons in website prose.

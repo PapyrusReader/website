@@ -28,6 +28,10 @@ class InstallReleaseTest(unittest.TestCase):
             "index.html": "<html>Website</html>",
             "css/style.css": "body {}",
             "js/main.js": "console.log('website')",
+            "status/index.html": "<html>Status</html>",
+            "js/services.js": "services",
+            "js/downloads.js": "downloads",
+            "js/status.js": "status",
             "version.json": json.dumps({"version": "1.0.0", "revision": revision or self.revision}),
         }
         with tarfile.open(path, "w:gz") as target:
