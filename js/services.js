@@ -4,7 +4,7 @@
   const suffixes = {
     installer: 'windows-x64-setup.exe', windows_archive: 'windows-x64.zip',
     deb: 'linux-x64.deb', appimage: 'linux-x64.AppImage', linux_archive: 'linux-x64.tar.gz',
-    android: 'android-universal.aab', web: 'web.zip', instructions: 'INSTALL.md',
+    android: 'android-universal.aab', android_apk: 'android-universal.apk', web: 'web.zip', instructions: 'INSTALL.md',
     checksums: 'SHA256SUMS', manifest: 'release-manifest.json',
   };
   function releaseDownloads(release) {

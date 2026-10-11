@@ -113,12 +113,19 @@ the static assets. It never deploys pull requests.
 
 ## Downloads and service status
 
-Each platform has separate direct asset links. The checked-in links remain usable
+Each platform expands from a compact download row to show its direct asset links.
+Native details and summary elements support keyboard navigation and work without
+JavaScript. Opening another platform closes the previous one in browsers that
+support named details groups. The checked-in links remain usable
 without JavaScript. With JavaScript, the page reads the latest published client
 release from GitHub and replaces links with that release's available assets.
 A failed or rate-limited lookup keeps the known release links and labels the
-lookup as unavailable. Android's AAB is clearly labeled as a publishing bundle.
-Tester installations use the separate Google Play opt-in link.
+lookup as unavailable. The APK link appears when the published release includes
+an APK. Tester installations use the separate Google Play opt-in link. Keep
+platform rows to names, architecture and download links. Put installation
+requirements and signing details in the GitHub release installation instructions.
+The website links to checksums, the manifest and release notes. These links use
+full-width rows on mobile.
 
 `/status/` reads a cached `/status.json` snapshot. A systemd timer probes API
 health and sync readiness once per minute, independently of site visitors.
