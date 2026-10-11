@@ -136,4 +136,6 @@ Run `systemctl daemon-reload`, `systemctl start papyrus-status.service` and
 the website container. Subsequent website releases still switch static files
 without restarting services. `/status.json` is publicly cached for 30 seconds.
 
-Use no semicolons in website prose.
+Describe features and requirements in plain, connected prose. Avoid slogans,
+filler, and strings of sentence fragments. Omit introductory copy when a heading
+and the content already explain the section. Use no semicolons in website prose.
