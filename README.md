@@ -75,8 +75,14 @@ proxy/network must be provisioned first from the workspace's `deploy/edge`
 runbook. Website containers publish no host ports. They do not join the app's
 private network or mount its files.
 
-Run `npm version patch --no-git-tag-version` to update `package.json` and
-`package-lock.json`, then include both files in the website pull request.
+Ordinary feature/fix PRs target the default `development` branch without a
+version bump. CI builds and tests integration changes without deploying them.
+
+When ready to release, run `npm version patch --no-git-tag-version` to update
+`package.json` and `package-lock.json` in a preparation PR to `development`.
+Then open `development` → `master` and use **Create a merge commit**. Bring
+`master` back into `development` after the release; keep both long-lived branches
+and do not squash release promotions.
 After merging into `master`, **Website release** builds only when that version
 increases. It verifies and deploys the archive, checks the public build revision,
 then publishes a GitHub release with its SHA-256 checksum. Run the workflow
