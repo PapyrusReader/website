@@ -85,7 +85,7 @@ h3 { font-size: 25px; letter-spacing: -.025em; }
   .theme-toggle { padding-inline: 10px; }
   .theme-toggle span { display: none; }
   .menu-toggle { display: inline-flex; }
-  .nav-links { order: 3; width: 100%; margin: 0; padding: 12px 0 8px; justify-content: space-between; }
+  .nav-links { order: 3; width: 100%; flex-wrap: wrap; margin: 0; padding: 12px 0 8px; justify-content: space-between; }
   .js .navigation { position: relative; flex-wrap: nowrap; }
   .js .nav-links {
     display: none;

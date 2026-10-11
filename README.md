@@ -81,7 +81,7 @@ version bump. CI builds and tests integration changes without deploying them.
 When ready to release, run `npm version patch --no-git-tag-version` to update
 `package.json` and `package-lock.json` in a preparation PR to `development`.
 Then open `development` → `master` and use **Create a merge commit**. Bring
-`master` back into `development` after the release. keep both long-lived branches
+`master` back into `development` after the release. Keep both long-lived branches
 and do not squash release promotions.
 After merging into `master`, **Website release** builds only when that version
 increases. It verifies and deploys the archive, checks the public build revision,
@@ -103,13 +103,13 @@ owns `/srv/apps/papyrus-website/site` and has no sudo or Docker access. The
 website's own container mounts that directory read-only. Each deployment validates the
 archive checksum, revision and required assets before atomically switching the
 relative `current` symlink to `releases/<commit>`. Previous releases remain
-available for rollback. switch `current` back to an earlier relative release
+available for rollback. Switch `current` back to an earlier relative release
 path without restarting any container. The app Compose project is not involved
-in website deployments. app releases do not restart the website or shared proxy.
+in website deployments. App releases do not restart the website or shared proxy.
 
 Run the focused automation checks with
 `python3 -m unittest discover -s scripts/tests -v`. Normal website CI also builds
-the static assets. it never deploys pull requests.
+the static assets. It never deploys pull requests.
 
 ## Downloads and service status
 
