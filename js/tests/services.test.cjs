@@ -29,3 +29,10 @@ test('status snapshots report monitored results and reject stale or incomplete d
   assert.throws(() => serviceStatus({ ...snapshot, checked_at: 'invalid' }, now));
   assert.throws(() => serviceStatus({ ...snapshot, services: { api: 'operational' } }, now));
 });
+
+test('APK downloads appear only when a release actually publishes one', () => {
+  const value = release();
+  assert.equal(releaseDownloads(value).links.android_apk, undefined);
+  value.assets.push({ name: 'papyrus-v0.0.3+4-android-universal.apk', browser_download_url: 'https://github.com/PapyrusReader/client/releases/download/v0.0.3%2B4/papyrus-v0.0.3%2B4-android-universal.apk' });
+  assert.equal(releaseDownloads(value).links.android_apk, value.assets[1].browser_download_url);
+});
