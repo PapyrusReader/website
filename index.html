@@ -84,6 +84,7 @@
       <div class="nav-links" id="nav-links">
         <a href="#about">About</a>
         <a href="#downloads">Downloads</a>
+        <a href="/status/">Status</a>
         <a href="https://github.com/PapyrusReader/papyrus">GitHub <span aria-hidden="true">↗</span></a>
       </div>
     </nav>
@@ -156,20 +157,18 @@
       </div>
     </section>
     <section class="downloads" id="downloads" aria-labelledby="downloads-title">
-      <div class="container download-layout">
-        <div>
-          <h2 id="downloads-title">Download Papyrus</h2>
-          <p class="section-description">Use Papyrus in your browser or install the Windows or Linux app. Desktop
-            downloads, checksums, release notes, and installation details are available on GitHub. Android releases target Google Play internal testing for invited testers.</p>
+      <div class="container">
+        <h2 id="downloads-title">Download Papyrus</h2>
+        <p class="section-description">Choose your platform and download directly. Your books stay yours.</p>
+        <p class="release-label" id="release-label" aria-live="polite">Release 0.0.2+2</p>
+        <div class="download-grid">
+          <article class="platform-card"><h3>Windows</h3><p>For Windows x64. The installer is unsigned, so Windows may show a download warning.</p><div class="platform-links"><a class="button button-primary" data-download="installer" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/papyrus-v0.0.2%2B2-windows-x64-setup.exe">Windows installer (.exe) <span aria-hidden="true">↓</span></a><a class="text-link" data-download="windows_archive" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/papyrus-v0.0.2%2B2-windows-x64.zip">Portable ZIP <span aria-hidden="true">↓</span></a></div></article>
+          <article class="platform-card"><h3>Linux</h3><p>For Ubuntu 24.04 x64. The AppImage also works on Debian 13.</p><div class="platform-links"><a class="button button-primary" data-download="deb" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/papyrus-v0.0.2%2B2-linux-x64.deb">Ubuntu package (.deb) <span aria-hidden="true">↓</span></a><a class="text-link" data-download="appimage" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/papyrus-v0.0.2%2B2-linux-x64.AppImage">AppImage <span aria-hidden="true">↓</span></a><a class="text-link" data-download="linux_archive" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/papyrus-v0.0.2%2B2-linux-x64.tar.gz">Portable archive (.tar.gz) <span aria-hidden="true">↓</span></a></div></article>
+          <article class="platform-card"><h3>Android</h3><p>Available to invited Google Play testers. The AAB is a publishing bundle and cannot be installed directly.</p><div class="platform-links"><a class="button button-primary" href="https://play.google.com/apps/internaltest/4701535216306698776">Get it on Google Play <span aria-hidden="true">↗</span></a><a class="text-link" data-download="android" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/papyrus-v0.0.2%2B2-android-universal.aab">Android App Bundle (.aab) <span aria-hidden="true">↓</span></a></div></article>
+          <article class="platform-card"><h3>Web</h3><p>Open Papyrus in your browser, or download the web build for self-hosting.</p><div class="platform-links"><a class="button button-primary" href="https://app.papyrus-reader.com">Open web app <span aria-hidden="true">↗</span></a><a class="text-link" data-download="web" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/papyrus-v0.0.2%2B2-web.zip">Web archive (.zip) <span aria-hidden="true">↓</span></a></div></article>
         </div>
-        <div class="download-options">
-          <a class="download-link" href="https://app.papyrus-reader.com"><span><strong>Open the web
-                app</strong><small>Use Papyrus in your browser</small></span><span aria-hidden="true">↗</span></a>
-          <a class="download-link" href="https://github.com/PapyrusReader/client/releases/latest"><span><strong>Windows
-                &amp; Linux</strong><small>Windows installer or ZIP; Linux .deb, AppImage or archive</small></span><span
-              aria-hidden="true">↗</span></a>
-          <div class="download-link"><span><strong>Apple platforms coming later</strong><small>iOS and macOS</small></span></div>
-        </div>
+        <div class="release-resources"><a class="text-link" data-download="instructions" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/papyrus-v0.0.2%2B2-INSTALL.md">Installation instructions <span aria-hidden="true">↓</span></a><a class="text-link" data-download="checksums" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/SHA256SUMS">SHA-256 checksums <span aria-hidden="true">↓</span></a><a class="text-link" data-download="manifest" href="https://github.com/PapyrusReader/client/releases/download/v0.0.2%2B2/release-manifest.json">Release manifest <span aria-hidden="true">↓</span></a><a class="text-link" id="release-notes" href="https://github.com/PapyrusReader/client/releases/tag/v0.0.2%2B2">Release notes ↗</a></div>
+        <p class="download-note">macOS and iOS downloads are not available yet.</p>
       </div>
     </section>
     <section class="open-source container" aria-labelledby="open-source-title">
@@ -191,6 +190,8 @@
     <a href="https://github.com/PapyrusReader/client/blob/master/LICENSE">AGPL-3.0 license</a>
   </footer>
   <script src="js/main.js" defer></script>
+  <script src="js/services.js" defer></script>
+  <script src="js/downloads.js" defer></script>
 </body>
 
 </html>
