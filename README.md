@@ -71,7 +71,7 @@ An administrator installs `deploy/compose.yml` at
 dedicated upload account. After installing the first static build into
 `site/releases/<commit>` and linking `site/current` to that relative path, run
 `docker compose -f compose.yml up -d --wait` from this directory. The shared
-proxy/network must be provisioned first from the workspace's `deploy/edge`
+proxy/network must be provisioned first from `PapyrusReader/observability` (`observability/edge` in the workspace)
 runbook. Website containers publish no host ports. They do not join the app's
 private network or mount its files.
 
