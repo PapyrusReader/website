@@ -12,6 +12,10 @@ npm run dev
 This starts a local server at `http://localhost:8090` with live SCSS recompilation. JavaScript source files run directly. refresh after editing them.
 
 Build deployable assets with `npm run build`. output is written to `build/`.
+The build inlines the small stylesheet and early theme script to avoid blocking
+requests, and adds content hashes to asset URLs for safe browser caching.
+The website Caddy configuration compresses text responses and caches versioned
+assets for one year. HTML and unversioned assets revalidate on each visit.
 
 ## Design and assets
 
@@ -29,10 +33,11 @@ Without JavaScript, the system theme, navigation, screenshot and download links
 remain usable. Reduced-motion preferences disable smooth scrolling.
 
 Brand SVGs in `public/img/` are copied from the client's `public/img/` assets.
-The library screenshot is the original client README image, with local WebP
-variants at 640, 1280, 1920 and 2560 pixels. The full-resolution PNG is available
-through the enlargement link and is the social preview image. It always shows
-the real dark-mode app, independent of the website theme. Favicons use the
+The library screenshots show the real app in light and dark modes, with local
+WebP variants at 640, 768, 1280, 1920 and 2560 pixels. The screenshot follows the
+website theme. Clicking it opens an on-page preview of the full-resolution JPEG,
+which can be closed by tapping the image, pressing Escape, or clicking outside it.
+The light screenshot is the social preview image. Favicons use the
 canonical emblem from the client's `app/assets/images/logo-icon-light.svg`.
 These are checked-in assets. website builds do not need the client repository
 or image-generation tools.
@@ -71,7 +76,7 @@ An administrator installs `deploy/compose.yml` at
 dedicated upload account. After installing the first static build into
 `site/releases/<commit>` and linking `site/current` to that relative path, run
 `docker compose -f compose.yml up -d --wait` from this directory. The shared
-proxy/network must be provisioned first from the workspace's `deploy/edge`
+proxy/network must be provisioned first from `PapyrusReader/observability` (`observability/edge` in the workspace)
 runbook. Website containers publish no host ports. They do not join the app's
 private network or mount its files.
 
