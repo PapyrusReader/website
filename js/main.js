@@ -25,8 +25,32 @@
     if (!links.contains(event.target) && !menuButton.contains(event.target)) closeMenu();
   });
   window.matchMedia('(max-width: 720px)').addEventListener('change', closeMenu);
-  const updateThemeButton = () => {
-    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  const libraryPreview = document.querySelector('.library-preview');
+  const libraryDialog = document.getElementById('library-dialog');
+  const updatePreviewImage = () => {
+    const image = libraryDialog.querySelector('img');
+    image.src = libraryPreview.querySelector('[data-library-full-size]').href;
+    image.alt = libraryPreview.querySelector('img').alt;
+  };
+  if (libraryPreview && libraryDialog) {
+    libraryPreview.querySelector('[data-library-full-size]').addEventListener('click', (event) => {
+      event.preventDefault();
+      updatePreviewImage();
+      libraryDialog.showModal();
+    });
+    libraryDialog.addEventListener('click', () => libraryDialog.close());
+  }
+  const updateThemeUI = () => {
+    const theme = document.documentElement.dataset.theme;
+    const next = theme === 'dark' ? 'light' : 'dark';
+    if (libraryPreview) {
+      libraryPreview.querySelector('[data-library-dark]').media = theme === 'dark' ? 'all' : 'not all';
+      libraryPreview.querySelector('img').alt = `Papyrus in ${theme} mode, with physical books and ebooks displayed together in a cover grid`;
+      libraryPreview.querySelectorAll('[data-library-full-size]').forEach((link) => {
+        link.href = `public/img/library-${theme}.jpg`;
+      });
+      if (libraryDialog && libraryDialog.open) updatePreviewImage();
+    }
     themeLabel.textContent = next === 'dark' ? 'Dark' : 'Light';
     themeButton.querySelector('svg').innerHTML = next === 'dark'
       ? '<path d="M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z"/>'
@@ -35,8 +59,8 @@
   };
   if (window.PapyrusTheme) {
     themeButton.hidden = false;
-    updateThemeButton();
+    updateThemeUI();
     themeButton.addEventListener('click', () => window.PapyrusTheme.toggle());
-    window.addEventListener('papyrus:themechange', updateThemeButton);
+    window.addEventListener('papyrus:themechange', updateThemeUI);
   }
 })();

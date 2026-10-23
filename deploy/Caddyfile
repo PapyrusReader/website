@@ -1,4 +1,6 @@
 :8080 {
+	encode zstd gzip
+
 	@status path /status.json
 	handle @status {
 		root * /srv/status
@@ -7,6 +9,12 @@
 	}
 	handle {
 		root * /srv/site/current
+		@versioned {
+			path /css/* /js/* /public/*
+			query v=*
+		}
+		header @versioned Cache-Control "public, max-age=31536000, immutable"
+		header ?Cache-Control "no-cache"
 		file_server
 	}
 }
