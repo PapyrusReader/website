@@ -8,17 +8,22 @@
     "build:html": "cp index.html build/ && cp -r status build/ && node scripts/stamp-version.js",
     "build:js": "esbuild js/theme.js js/main.js js/services.js js/downloads.js js/status.js --minify --outdir=build/js",
     "build:assets": "cp -r public build/ && cp robots.txt sitemap.xml build/",
-    "build": "npm run clean && mkdir -p build/css build/js build/public && npm run build:scss && npm run build:html && npm run build:js && npm run build:assets",
+    "build": "npm run clean && mkdir -p build/css build/js build/public && npm run build:scss && npm run build:js && npm run build:html && npm run build:assets",
     "watch:scss": "sass scss/style.scss css/style.css --style=expanded --no-source-map --watch",
     "dev": "concurrently -n scss,server -c magenta,green \"npm run watch:scss\" \"serve -l 8090\"",
     "test": "node --test js/tests/*.test.cjs"
   },
   "devDependencies": {
     "concurrently": "^9.0.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.28.2",
     "sass": "^1.80.0"
   },
   "dependencies": {
     "serve": "^14.2.5"
+  },
+  "overrides": {
+    "serve": {
+      "compression": "^1.8.2"
+    }
   }
 }

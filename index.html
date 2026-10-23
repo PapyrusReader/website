@@ -15,7 +15,7 @@
     content="Organize physical and digital books with Papyrus, a free, open-source e-book reader and library manager. Read offline or sync across devices.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://papyrus-reader.com/">
-  <meta property="og:image" content="https://papyrus-reader.com/public/img/library.png">
+  <meta property="og:image" content="https://papyrus-reader.com/public/img/library-light.jpg">
   <meta property="og:image:width" content="2560">
   <meta property="og:image:height" content="1440">
   <meta property="og:image:alt" content="The Papyrus library, showing physical books and ebooks together">
@@ -43,7 +43,7 @@
           "operatingSystem": "Windows, Linux",
           "browserRequirements": "A modern web browser for the web app.",
           "downloadUrl": "https://github.com/PapyrusReader/client/releases/latest",
-          "screenshot": "https://papyrus-reader.com/public/img/library.png",
+          "screenshot": "https://papyrus-reader.com/public/img/library-light.jpg",
           "license": "https://github.com/PapyrusReader/client/blob/master/LICENSE",
           "isAccessibleForFree": true,
           "offers": { "@type": "Offer", "price": 0 },
@@ -93,8 +93,8 @@
   <main id="main">
     <section class="hero container" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <h1 id="hero-title">Your books, your data,<br>every device.</h1>
-        <p class="hero-description">Papyrus is a free, open-source app for organizing physical and digital books, reading e-books, and syncing your library across devices.</p>
+        <h1 id="hero-title">Your books, your data,<br><span class="marker-emphasis">every</span> device.</h1>
+        <p class="hero-description">Papyrus is a free, open-source app that brings your physical and digital books into one library. Access your books across devices, track your reading habits, and more.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="https://app.papyrus-reader.com">Try in browser <span
               aria-hidden="true">↗</span></a>
@@ -102,17 +102,23 @@
         </div>
       </div>
       <figure class="library-preview">
-        <a href="public/img/library.png" target="_blank" rel="noopener"
-          aria-label="Open the full-size Papyrus library screenshot in a new tab">
-          <img src="public/img/library-1280.webp"
-            srcset="public/img/library-640.webp 640w, public/img/library-1280.webp 1280w, public/img/library-1920.webp 1920w, public/img/library-2560.webp 2560w"
-            sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 1340px) calc(100vw - 80px), 1260px" width="2560"
-            height="1440" alt="Papyrus in dark mode, with physical books and ebooks displayed together in a cover grid"
-            fetchpriority="high">
+        <a href="public/img/library-light.jpg" data-library-full-size
+          aria-label="Preview the Papyrus library screenshot" aria-haspopup="dialog" aria-controls="library-dialog">
+          <picture>
+            <source data-library-dark media="(prefers-color-scheme: dark)"
+              srcset="public/img/library-dark-640.webp 640w, public/img/library-dark-768.webp 768w, public/img/library-dark-1280.webp 1280w, public/img/library-dark-1920.webp 1920w, public/img/library-dark-2560.webp 2560w"
+              sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 1340px) calc(100vw - 80px), 1260px">
+            <img src="public/img/library-light-1280.webp"
+              srcset="public/img/library-light-640.webp 640w, public/img/library-light-768.webp 768w, public/img/library-light-1280.webp 1280w, public/img/library-light-1920.webp 1920w, public/img/library-light-2560.webp 2560w"
+              sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 1340px) calc(100vw - 80px), 1260px" width="2560"
+              height="1440" alt="Papyrus library with physical books and ebooks displayed together in a cover grid"
+              fetchpriority="high">
+          </picture>
         </a>
-        <figcaption><a href="public/img/library.png" target="_blank" rel="noopener">View full size <span
-              aria-hidden="true">↗</span></a></figcaption>
       </figure>
+      <dialog id="library-dialog" class="library-dialog" aria-label="Papyrus library screenshot preview">
+        <img width="2560" height="1440" alt="Papyrus library screenshot">
+      </dialog>
     </section>
     <section class="product container" id="about" aria-labelledby="about-title">
       <h2 id="about-title">Features</h2>
